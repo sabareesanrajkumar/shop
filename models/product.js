@@ -18,20 +18,38 @@ const getProductsFromFile = (cb) => {
 };
 
 module.exports = class Product {
-  constructor(title, imageUrl, description, price) {
-    this.title = title;
+  constructor(id, title, imageUrl, description, price) {
+    (this.id = id), (this.title = title);
     this.imageUrl = imageUrl;
     this.description = description;
     this.price = price;
   }
 
   save() {
-    this.id = Math.random().toString();
     getProductsFromFile((products) => {
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), (err) => {
-        console.log(err);
-      });
+      if (this.id) {
+        const existingProductindex = products.findIndex(
+          (prod) => prod.id === this.id
+        );
+        const updatedProducts = [...products];
+        updatedProducts[existingProductindex] = this;
+        fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+          console.log(err);
+        });
+      } else {
+        this.id = Math.random().toString();
+        products.push(this);
+        fs.writeFile(p, JSON.stringify(products), (err) => {
+          console.log(err);
+        });
+      }
+    });
+  }
+  static deleteProductById(prodId) {
+    console.log("in product model", prodId);
+    getProductsFromFile((products) => {
+      const updatedProducts = products.filter((p) => p.id != prodId);
+      fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {});
     });
   }
 

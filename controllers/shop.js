@@ -27,7 +27,7 @@ exports.getIndex = (req, res, next) => {
     res.render("shop/index", {
       prods: products,
       pageTitle: "Shop",
-      path: "/products",
+      path: "/",
     });
   });
 };
@@ -51,7 +51,7 @@ exports.getOrders = (req, res, next) => {
   res.render("shop/orders", {
     path: "/orders",
     pageTitle: "Your Orders",
-    path: "/products",
+    path: "/orders",
   });
 };
 
